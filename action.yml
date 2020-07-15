@@ -1,0 +1,24 @@
+name: 'Create a branch upon a new Release'
+description: 'Creates a new branch based on a release'
+author: 'dragonchaser'
+inputs:
+    tag_name:
+      description: 'The name of the tag. This should come from the webhook payload, `github.GITHUB_REF` when a user pushes a new tag'
+      required: true
+    release_name_prefix:
+      description: 'The prefix of the release name, e.g. `Release`'
+      required: true
+    protect_branch:
+      description: 'Whether or not the resulting branch should be protected (modifications can only made by PR, defaults to false)'
+      required: false
+    github_token:
+      description: 'Github security token to interact with the repo'
+      required: true
+runs:
+  using: docker
+  image: Dockerfile
+  args:
+    - ${{ inputs.tag_name }}
+    - ${{ inputs.release_name_prefix }}
+    - ${{ inputs.github_token }}
+    - ${{ inputs.protect_branch }}
